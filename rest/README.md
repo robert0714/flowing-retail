@@ -94,9 +94,9 @@ This example shows a successful approach taken by many customers: using the work
 ![Microservices](../docs/resilience-patterns/v5.png)
 
 * Java
-    * Workflow model: [payment5.bpmn](java/payment/src/main/resources/payment5.bpmn) (hint: use the free [Camunda Modeler](https://camunda.com/download/modeler/) to show this model graphically)
-    * Worker Node.js: [index.js](java/payment/node-customer-credit-worker/index.js)
-    * Worker in Java (alternative): [CustomerCreditWorker.java](java/payment/src/main/java/io/flowing/retail/payment/worker/CustomerCreditWorker.java)
+    * Workflow model: [payment5.bpmn](java/payment-camunda/src/main/resources/payment5.bpmn) (hint: use the free [Camunda Modeler](https://camunda.com/download/modeler/) to show this model graphically)
+    * Worker Node.js: [index.js](java/payment-camunda/node-customer-credit-worker/index.js)
+    * Worker in Java (alternative): [CustomerCreditWorker.java](java/payment-camunda/src/main/java/io/flowing/retail/payment/resthacks/worker/CustomerCreditWorker.java)
 * C# (skipped V5 and directly implemented V6)
     * Workflow model:[PaymentV6.bpmn](csharp/payment/Models/PaymentV6.bpmn)
     * [PaymentControllerV6](csharp/payment/Controllers/PaymentController.cs#L74)
@@ -108,7 +108,7 @@ The last part of the example adds compensation to the game. In distributed syste
 
 ![Microservices](../docs/resilience-patterns/v6.png)
 
-See [payment6.bpmn / Java](java/payment/src/main/resources/payment6.bpmn) and [PaymentV6.bpmn / C#](csharp/payment/Models/PaymentV6.bpmn) for the workflow
+See [payment6.bpmn / Java](java/payment-camunda/src/main/resources/payment6.bpmn) and [PaymentV6.bpmn / C#](csharp/payment/Models/PaymentV6.bpmn) for the workflow
 
 # How-to run
 
