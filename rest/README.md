@@ -14,9 +14,9 @@ This simple call-chain is perfect for demonstrating important resilience pattern
 
 The following technology choices are available for the code demos:
 
-* [**Java**](java/payment) + Spring, Hystrix, Camunda
+* [**Java**](java/payment-camunda) + Spring, Hystrix, Camunda
 * [**C#**](csharp/payment) + Polly, Camunda
-* [**Node.js**](nodejs/payment) + [Brakes](https://github.com/awolden/brakes), Zeebe on Camunda Cloud
+* [**Node.js**](nodejs/payment-zeebe) + [Brakes](https://github.com/awolden/brakes), Zeebe on Camunda Cloud
 
 There is a stripped-down version available for:
 
@@ -31,9 +31,9 @@ Let's assume a scenario where the upstream credit card service still responds, b
 
 ![V1](../docs/resilience-patterns/v1.png)
 
-* Java: [PaymentRestHacksControllerV1.java](java/payment/src/main/java/io/flowing/retail/payment/port/resthacks/PaymentRestHacksControllerV1.java)
+* Java: [PaymentRestHacksControllerV1.java](java/payment-camunda/src/main/java/io/flowing/retail/payment/resthacks/PaymentRestHacksControllerV1.java)
 * C#: [PaymentControllerV1](csharp/payment/Controllers/PaymentController.cs#L16)
-* Node.js: [controller-v1.ts](nodejs/payment-zeebe/routes/controller-v1.ts)
+* Node.js: [controller-v1.ts](nodejs/payment-zeebe/src/routes/controller-v1.ts)
 
 ## Fail fast
 
@@ -41,9 +41,9 @@ A simple mitigation is to apply a **fail fast** pattern like [**circuit breaker*
 
 ![V2](../docs/resilience-patterns/v2.png)
 
-* Java: [PaymentRestHacksControllerV2.java](java/payment/src/main/java/io/flowing/retail/payment/port/resthacks/PaymentRestHacksControllerV2.java#L41)
+* Java: [PaymentRestHacksControllerV2.java](java/payment-camunda/src/main/java/io/flowing/retail/payment/resthacks/PaymentRestHacksControllerV2.java#L41)
 * C#: [PaymentControllerV2](csharp/payment/Controllers/PaymentController.cs#L74)
-* Node.js: [controller-v2.ts](nodejs/payment-zeebe/routes/controller-v2.ts#13)
+* Node.js: [controller-v2.ts](nodejs/payment-zeebe/src/routes/controller-v2.ts#13)
 
 
 ## Fail fast is not enough
@@ -55,13 +55,13 @@ Failing fast is good, but it is not enough. Frequently, a retry after the credit
 In the example, I use the [Camunda workflow engine](http://camunda.com/) (or Zeebe in [Camunda Cloud](https://camunda.io)) to do the stateful retry reliably.
 
 * Java
-    * [PaymentRestHacksControllerV3.java](java/payment/src/main/java/io/flowing/retail/payment/port/resthacks/PaymentRestHacksControllerV3.java#L45)
+    * [PaymentRestHacksControllerV3.java](java/payment-camunda/src/main/java/io/flowing/retail/payment/resthacks/PaymentRestHacksControllerV3.java#L45)
     * The workflow is created by Java DSL
 * C#
     * [PaymentControllerV3](csharp/payment/Controllers/PaymentController.cs#L110)
     * [PaymentV3.bpmn](csharp/payment/Models/PaymentV3.bpmn)
 * Node.js
-    * [controller-v3.ts](nodejs/payment-zeebe/routes/controller-v3.ts#25)
+    * [controller-v3.ts](nodejs/payment-zeebe/src/routes/controller-v3.ts#25)
     * [paymentV3.bpmn](nodejs/payment-zeebe/bpmn/paymentV3.bpmn)
 
 ## Keep synchronous responses
@@ -75,7 +75,7 @@ HTTP supports this via return codes: `200 OK` means "_all OK_", `202 ACCEPTED` m
 ![Sync vs. async](../docs/resilience-patterns/syncAsync.png)
 
 * Java
-    * [PaymentRestHacksControllerV4.java](java/payment/src/main/java/io/flowing/retail/payment/port/resthacks/PaymentRestHacksControllerV4.java#L83)
+    * [PaymentRestHacksControllerV4.java](java/payment-camunda/src/main/java/io/flowing/retail/payment/resthacks/PaymentRestHacksControllerV4.java#L83)
     * The workflow is created by Java DSL
 * C#
     * [PaymentControllerV4](csharp/payment/Controllers/PaymentController.cs#L159).

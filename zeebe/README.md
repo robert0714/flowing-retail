@@ -28,9 +28,9 @@ Then you have to configure the cloud credentials and start the microservices.
 In Java the [Spring Zeebe](https://github.com/zeebe-io/spring-zeebe/) integration is used to configure and manage the client, so you configure it via the `application.properties` in all services, for example:
 
 ```
-zeebe.client.cloud.clusterId=210b559d-717f-4570-90e8-93c0c5922967
-zeebe.client.cloud.clientId=vqbR4rET8RurfXmv1455FXHsR4hzIIRG
-zeebe.client.cloud.clientSecret=-2lT24YnOzOD9EmojR_p3eClYux12efjwqnudesdGkMEHBrACD9FWe-cxwbRo7VW
+zeebe.client.cloud.clusterId=bafa9399-0b5b-4f95-896c-67422b25cbcb
+zeebe.client.cloud.clientId=z-jhC8nxP9Pv8eFNkfKaN3orNhJ6W1uG
+zeebe.client.cloud.clientSecret=1UIO_zGt.QNr_3LipSWr4TP17-0v6ZTHc.W-K0AHKYk~8Ek6m2_biWbg0Gi5kpma
 ```
 
 Now start the different microservices components using Spring Boot one by one (make sure you are in the `java` directory):
@@ -38,6 +38,9 @@ Now start the different microservices components using Spring Boot one by one (m
 ```
 mvn -f checkout exec:java
 mvn -f inventory exec:java
+mvn -f order-fulfillment  exec:java
+mvn -f payment  exec:java
+mvn -f shipping  exec:java
 ...
 ```
 
