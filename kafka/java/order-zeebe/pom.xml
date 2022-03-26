@@ -6,7 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<properties>
 		<maven.compiler.release>8</maven.compiler.release>
-		<spring.boot.version>2.3.12.RELEASE</spring.boot.version>
+		<spring-boot.version>2.3.12.RELEASE</spring-boot.version>
 		<spring-cloud-stream.version>3.0.13.RELEASE</spring-cloud-stream.version>
 		<zeebe.version>1.2.1</zeebe.version>
 	</properties>
@@ -26,7 +26,7 @@
 			<!-- required to add JSR310 time formats for Jackson to ObjectMapper -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-json</artifactId>
-			<version>${spring.boot.version}</version>
+			<version>${spring-boot.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>io.camunda</groupId>
@@ -38,7 +38,7 @@
   		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>${spring.boot.version}</version>
+			<version>${spring-boot.version}</version>
         </dependency>
 		<!-- API & Runtime, java.xml.bind module -->
 		<dependency>
@@ -69,7 +69,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${spring.boot.version}</version>
+				<version>${spring-boot.version}</version>
 				<executions>
 					<execution>
 						<goals>

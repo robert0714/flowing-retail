@@ -78,10 +78,10 @@ docker-compose build
 docker-compose up
 ```
 
-* After everything has started up you are ready to visit the overview page [http://localhost:8099](http://localhost:8089)
+* After everything has started up you are ready to visit the overview page [http://localhost:8099](http://localhost:8099)
 * You can place an order via [http://localhost:8091](http://localhost:8091)
-* You can inspect insides of Order via [http://localhost:8092](http://localhost:8092)
-* You can inspect insides of Payment via [http://localhost:8093](http://localhost:8093)
+* You can inspect insides of Order Camunda (Username: demo ,Password: demo) via [http://localhost:8092](http://localhost:8092). [reference: official site](https://docs.camunda.org/manual/7.16/webapps/admin/user-management/#initial-user-setup)
+* You can inspect insides of Payment Camunda (Username: demo ,Password: demo)  via [http://localhost:8093](http://localhost:8093). [reference: official site](https://docs.camunda.org/manual/7.16/webapps/admin/user-management/#initial-user-setup)
 * You can inspect all events going on via [http://localhost:8095](http://localhost:8095)
 
 If you like you can connect to Kafka from your local Docker host machine too. 
@@ -109,12 +109,17 @@ kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --par
 kafka-topics.sh --list --zookeeper localhost:2181
 ```
 
+You can use akhq (localhost:8080) to create topics.
+
 * Start the different microservices components by Spring Boot one by one, e.g.
 
 ```
 mvn -f checkout exec:java
 mvn -f order-camunda exec:java
-...
+mvn -f payment  exec:java
+mvn -f inventory exec:java
+mvn -f shipping  exec:java
+mvn -f monitor  exec:java
 ```
 
 Here you could easily switch to use order-zeebe instead. In this case make sure that you startup your Zeebe broker and create the *default-topic* first as described in [Install Zeebe](https://docs.zeebe.io/introduction/install.html).
@@ -126,7 +131,7 @@ checkout/io.flowing.retail.java.CheckoutApplication
 ...
 ```
 
-* Now you can place an order via [http://localhost:8091](http://localhost:8091)
-* You can inspect insided of Order via [http://localhost:8092](http://localhost:8092)
-* You can inspect insides of Payment via [http://localhost:8093](http://localhost:8093)
+* You can place an order via [http://localhost:8091](http://localhost:8091)
+* You can inspect insides of Order Camunda (Username: demo ,Password: demo) via [http://localhost:8092](http://localhost:8092). [reference: official site](https://docs.camunda.org/manual/7.16/webapps/admin/user-management/#initial-user-setup)
+* You can inspect insides of Payment Camunda (Username: demo ,Password: demo)  via [http://localhost:8093](http://localhost:8093). [reference: official site](https://docs.camunda.org/manual/7.16/webapps/admin/user-management/#initial-user-setup)
 * You can inspect all events going on via [http://localhost:8095](http://localhost:8095)

@@ -7,7 +7,7 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<spring.boot.version>2.3.12.RELEASE</spring.boot.version>
+		<spring-boot.version>2.3.12.RELEASE</spring-boot.version>
 		<zeebe.version>1.2.7</zeebe.version>
 	</properties>
 	<dependencyManagement>
@@ -15,7 +15,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${spring.boot.version}</version>
+				<version>${spring-boot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

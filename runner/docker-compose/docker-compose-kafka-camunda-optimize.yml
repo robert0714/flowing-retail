@@ -53,7 +53,7 @@ services:
     networks:
       - flowing
     environment:
-      - TZ=Europe/Berlin
+      - TZ=Asia/Taipei
     ports:
       - 8080:8080
     restart: always
