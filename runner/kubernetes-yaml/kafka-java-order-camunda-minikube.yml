@@ -29,9 +29,9 @@ spec:
             - name: TZ
               value: 'Asia/Taipei'
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+              value: 'my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092'
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
-              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+              value: 'my-cluster-zookeeper-client.kafka.svc.cluster.local:2181'
           ports:
             - containerPort: 8091
               protocol: TCP
@@ -100,11 +100,11 @@ spec:
             - name: TZ
               value: 'Asia/Taipei'
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+              value: 'my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092'
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
-              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+              value: 'my-cluster-zookeeper-client.kafka.svc.cluster.local:2181'
             - name: spring.datasource.url
-              value: 'jdbc:h2:/tmp/robert-camunda-db-order;DB_CLOSE_ON_EXIT=false'
+              value: 'jdbc:h2:/tmp/camunda-db-order;DB_CLOSE_ON_EXIT=false'
           ports:
             - containerPort: 8092
               protocol: TCP
@@ -169,11 +169,11 @@ spec:
           name: payment-camunda
           env:
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+              value: 'my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092'
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
-              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+              value: 'my-cluster-zookeeper-client.kafka.svc.cluster.local:2181'
             - name: spring.datasource.url
-              value: 'jdbc:h2:/tmp/robert-camunda-db-order;DB_CLOSE_ON_EXIT=false'
+              value: 'jdbc:h2:/tmp/camunda-db-order;DB_CLOSE_ON_EXIT=false'
             - name: spring.jpa.generate-ddl
               value: 'true'
             - name: spring.jpa.hibernate.ddl-auto
@@ -247,9 +247,9 @@ spec:
             - name: TZ
               value: Asia/Taipei
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+              value: 'my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092'
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
-              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+              value: 'my-cluster-zookeeper-client.kafka.svc.cluster.local:2181'
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -313,9 +313,9 @@ spec:
             - name: TZ
               value: Asia/Taipei
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+              value: 'my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092'
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
-              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+              value: 'my-cluster-zookeeper-client.kafka.svc.cluster.local:2181'
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -376,10 +376,12 @@ spec:
         - resources: {}
           name: monitor
           env:
+            - name: TZ
+              value: Asia/Taipei
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+              value: 'my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092'
             - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
-              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+              value: 'my-cluster-zookeeper-client.kafka.svc.cluster.local:2181'
           ports:
             - containerPort: 8095
               protocol: TCP

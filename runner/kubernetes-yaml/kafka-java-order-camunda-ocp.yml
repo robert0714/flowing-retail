@@ -1,0 +1,415 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: checkout
+  namespace: burr
+  labels:
+    app: checkout
+    app.kubernetes.io/component: checkout
+    app.kubernetes.io/instance: checkout
+    app.kubernetes.io/name: checkout
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: checkout
+  template:
+    metadata:
+      labels:
+        app: checkout
+        deploymentconfig: checkout
+    spec:
+      volumes:
+        - name: checkout-1
+          emptyDir: {}
+      containers:
+        - resources: {}
+          name: checkout
+          env:
+            - name: TZ
+              value: 'Asia/Taipei'
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+          ports:
+            - containerPort: 8091
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: checkout-1
+              mountPath: /tmp
+          terminationMessagePolicy: File
+          image: flowingretail/kafka-java-checkout
+      restartPolicy: Always
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: checkout
+  namespace: burr
+  labels:
+    app: checkout
+    app.kubernetes.io/component: checkout
+    app.kubernetes.io/instance: checkout
+    app.kubernetes.io/name: checkout
+    app.openshift.io/runtime-version: latest
+spec:
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 8091-tcp
+      protocol: TCP
+      port: 8091
+      targetPort: 8091
+  selector:
+    app: checkout
+    deploymentconfig: checkout
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: order-camunda
+  namespace: burr
+  labels:
+    app: order-camunda
+    app.kubernetes.io/component: order-camunda
+    app.kubernetes.io/instance: order-camunda
+    app.kubernetes.io/name: order-camunda
+    app.openshift.io/runtime-namespace: burr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-camunda
+  template:
+    metadata:
+      labels:
+        app: order-camunda
+        deploymentconfig: order-camunda
+    spec:
+      volumes:
+        - name: order-camunda-1
+          emptyDir: {}
+      containers:
+        - resources: {}
+          name: order-camunda
+          env:
+            - name: TZ
+              value: 'Asia/Taipei'
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+            - name: spring.datasource.url
+              value: 'jdbc:h2:/tmp/robert-camunda-db-order;DB_CLOSE_ON_EXIT=false'
+          ports:
+            - containerPort: 8092
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: order-camunda-1
+              mountPath: /tmp
+          terminationMessagePolicy: File
+          image: flowingretail/kafka-java-order-camunda
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: order-camunda
+  namespace: burr
+  labels:
+    app: order-camunda
+    app.kubernetes.io/component: order-camunda
+    app.kubernetes.io/instance: order-camunda
+    app.kubernetes.io/name: order-camunda
+    app.openshift.io/runtime-version: latest
+  annotations:
+    openshift.io/generated-by: OpenShiftWebConsole
+spec:
+  ports:
+    - name: 8092-tcp
+      protocol: TCP
+      port: 8092
+      targetPort: 8092
+  selector:
+    app: order-camunda
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:  
+  name: payment-camunda
+  namespace: burr
+  labels:
+    app: payment-camunda
+    app.kubernetes.io/component: payment-camunda
+    app.kubernetes.io/instance: payment-camunda
+    app.kubernetes.io/name: payment-camunda
+    app.openshift.io/runtime-namespace: burr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-camunda
+  template:
+    metadata:
+      labels:
+        app: payment-camunda
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      volumes:
+        - name: payment-camunda-1
+          emptyDir: {}
+      containers:
+        - resources: {}
+          name: payment-camunda
+          env:
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+            - name: spring.datasource.url
+              value: 'jdbc:h2:/tmp/robert-camunda-db-order;DB_CLOSE_ON_EXIT=false'
+            - name: spring.jpa.generate-ddl
+              value: 'true'
+            - name: spring.jpa.hibernate.ddl-auto
+              value: create-drop
+            - name: spring.jpa.defer-datasource-initialization
+              value: 'true'
+            - name: TZ
+              value: Asia/Taipei
+          ports:
+            - containerPort: 8093
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: payment-camunda-1
+              mountPath: /tmp
+          image: flowingretail/kafka-java-payment-camunda
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: payment-camunda
+  namespace: burr
+  labels:
+    app: payment-camunda
+    app.kubernetes.io/component: payment-camunda
+    app.kubernetes.io/instance: payment-camunda
+    app.kubernetes.io/name: payment-camunda
+    app.openshift.io/runtime-version: latest
+  annotations:
+    openshift.io/generated-by: OpenShiftWebConsole
+spec:
+  ports:
+    - name: 8093-tcp
+      protocol: TCP
+      port: 8093
+      targetPort: 8093
+  selector:
+    app: payment-camunda
+    deploymentconfig: payment-camunda
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: inventory
+  namespace: burr
+  labels:
+    app: inventory
+    app.kubernetes.io/component: inventory
+    app.kubernetes.io/instance: inventory
+    app.kubernetes.io/name: inventory
+    app.openshift.io/runtime: java
+    app.openshift.io/runtime-namespace: burr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory
+  template:
+    metadata:
+      labels:
+        app: inventory
+    spec:
+      volumes:
+        - name: inventory-1
+          emptyDir: {}
+      containers:
+        - resources: {}
+          name: inventory
+          env:
+            - name: TZ
+              value: Asia/Taipei
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: inventory-1
+              mountPath: /tmp
+          image: flowingretail/kafka-java-inventory
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: inventory
+  namespace: burr
+  labels:
+    app: inventory
+    app.kubernetes.io/component: inventory
+    app.kubernetes.io/instance: inventory
+    app.kubernetes.io/name: inventory
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: inventory
+    deploymentconfig: inventory
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: shipping  
+  namespace: burr
+  labels:
+    app: shipping
+    app.kubernetes.io/component: shipping
+    app.kubernetes.io/instance: shipping
+    app.kubernetes.io/name: shipping
+    app.openshift.io/runtime-namespace: burr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shipping
+  template:
+    metadata:
+      labels:
+        app: shipping
+        deploymentconfig: shipping
+    spec:
+      volumes:
+        - name: shipping-1
+          emptyDir: {}
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: shipping
+          env:
+            - name: TZ
+              value: Asia/Taipei
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: shipping-1
+              mountPath: /tmp
+          terminationMessagePolicy: File
+          image: flowingretail/kafka-java-shipping
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: shipping
+  namespace: burr
+  labels:
+    app: shipping
+    app.kubernetes.io/component: shipping
+    app.kubernetes.io/instance: shipping
+    app.kubernetes.io/name: shipping
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: shipping
+    deploymentconfig: shipping
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: monitor
+  namespace: burr
+  labels:
+    app: monitor
+    app.kubernetes.io/component: monitor
+    app.kubernetes.io/instance: monitor
+    app.kubernetes.io/name: monitor
+    app.openshift.io/runtime-namespace: burr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitor
+  template:
+    metadata:
+      labels:
+        app: monitor
+        deploymentconfig: monitor
+    spec:
+      volumes:
+        - name: monitor-1
+          emptyDir: {}
+      containers:
+        - resources: {}
+          name: monitor
+          env:
+            - name: TZ
+              value: Asia/Taipei
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+              value: 'my-cluster-kafka-bootstrap.burr.svc.cluster.local:9092'
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZKNODES
+              value: 'my-cluster-zookeeper-client.burr.svc.cluster.local:2181'
+          ports:
+            - containerPort: 8095
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: monitor-1
+              mountPath: /tmp
+          image: flowingretail/kafka-java-monitor
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: monitor
+  namespace: burr
+  labels:
+    app: monitor
+    app.kubernetes.io/component: monitor
+    app.kubernetes.io/instance: monitor
+    app.kubernetes.io/name: monitor
+    app.openshift.io/runtime-version: latest
+spec:
+  ports:
+    - name: 8095-tcp
+      protocol: TCP
+      port: 8095
+      targetPort: 8095
+  selector:
+    app: monitor
+    deploymentconfig: monitor
+---
