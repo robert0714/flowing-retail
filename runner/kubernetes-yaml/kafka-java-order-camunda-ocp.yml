@@ -18,6 +18,9 @@ spec:
       labels:
         app: checkout
         deploymentconfig: checkout
+    annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+        sidecar.istio.io/inject: 'false'    
     spec:
       volumes:
         - name: checkout-1
@@ -89,6 +92,9 @@ spec:
       labels:
         app: order-camunda
         deploymentconfig: order-camunda
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+        sidecar.istio.io/inject: 'false'
     spec:
       volumes:
         - name: order-camunda-1
@@ -160,6 +166,7 @@ spec:
         app: payment-camunda
       annotations:
         openshift.io/generated-by: OpenShiftWebConsole
+        sidecar.istio.io/inject: 'false'
     spec:
       volumes:
         - name: payment-camunda-1
@@ -231,11 +238,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: inventory
+      app: inventory      
   template:
     metadata:
       labels:
         app: inventory
+        deploymentconfig: inventory
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+        sidecar.istio.io/inject: 'false'
     spec:
       volumes:
         - name: inventory-1
@@ -301,6 +312,9 @@ spec:
       labels:
         app: shipping
         deploymentconfig: shipping
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+        sidecar.istio.io/inject: 'false'
     spec:
       volumes:
         - name: shipping-1
@@ -368,6 +382,9 @@ spec:
       labels:
         app: monitor
         deploymentconfig: monitor
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+        sidecar.istio.io/inject: 'false'
     spec:
       volumes:
         - name: monitor-1
