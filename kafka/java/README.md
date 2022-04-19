@@ -4,8 +4,8 @@ This folder contains services written in Java that connect to Apache Kafka as me
 
 Tech stack:
 
-* Java 8
-* Spring Boot 2.1.x
+* Java 11
+* Spring Boot 2.6.x
 * Spring Cloud Streams
 * Apache Kafka
 
